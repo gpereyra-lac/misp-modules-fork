@@ -89,14 +89,14 @@ def test_named_target_returns_one_object_per_measurement():
         assert obj["ObjectReference"][0]["referenced_uuid"] == ATTRIBUTE_UUID
 
 
-def test_measurement_id_carries_the_pending_tag():
+def test_measurement_id_carries_the_launched_tag():
     result, _, _ = _run(_query("ip-dst", "45.33.32.156"))
     identifier = _relations(result["results"]["Object"][0])["msm-id"]
-    assert [tag["name"] for tag in identifier["Tag"]] == ['ripe-atlas:status="pending"']
+    assert [tag["name"] for tag in identifier["Tag"]] == ['ripe-atlas:status="launched"']
 
 
 def test_object_holds_only_locally_known_fields():
-    """The status and the scheduled probes are left to the collector module."""
+    """The status and the scheduled probes belong to the ripe-atlas-result object."""
     result, _, _ = _run(_query("ip-dst", "45.33.32.156"))
     relations = _relations(result["results"]["Object"][0])
     assert set(relations) == {
@@ -107,7 +107,14 @@ def test_object_holds_only_locally_known_fields():
         "is-public",
         "results-url",
         "launch-time",
+        "probes-requested",
     }
+
+
+def test_object_records_the_probes_requested():
+    result, _, _ = _run(_query("ip-dst", "45.33.32.156", probes_requested="7"))
+    relations = _relations(result["results"]["Object"][0])
+    assert int(relations["probes-requested"]["value"]) == 7
 
 
 def test_measurements_are_private_by_default():

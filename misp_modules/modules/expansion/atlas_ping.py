@@ -28,10 +28,10 @@ moduleinfo = {
     ],
     "features": (
         "Creates a one-off ping measurement and returns a ripe-atlas-measurement object holding the"
-        ' measurement id, tagged ripe-atlas:status="pending". The results are collected afterwards by the'
-        " atlas_collect module. A target given as a name is resolved by each probe and measured over both"
-        " IPv4 and IPv6, which creates two measurements and therefore two objects. Measurements are private"
-        " unless the allow_public setting says otherwise."
+        ' measurement id, tagged ripe-atlas:status="launched". The results are collected afterwards by the'
+        " atlas_collect module, which adds a separate ripe-atlas-result object. A target given as a name is"
+        " resolved by each probe and measured over both IPv4 and IPv6, which creates two measurements and"
+        " therefore two objects. Measurements are private unless the allow_public setting says otherwise."
     ),
     "references": [
         "https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/creating-measurements/",

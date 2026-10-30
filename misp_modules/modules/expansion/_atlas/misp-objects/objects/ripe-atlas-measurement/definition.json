@@ -16,12 +16,6 @@
       "misp-attribute": "boolean",
       "ui-priority": 0
     },
-    "last-collected": {
-      "description": "Date and time the results were last collected.",
-      "disable_correlation": true,
-      "misp-attribute": "datetime",
-      "ui-priority": 0
-    },
     "launch-time": {
       "description": "Date and time the measurement was created.",
       "disable_correlation": true,
@@ -46,32 +40,8 @@
       "misp-attribute": "text",
       "ui-priority": 1
     },
-    "observed-ip": {
-      "description": "IP address of the target as seen by the probes (dst_addr in the results). Multiple when probes resolve the name to different addresses.",
-      "misp-attribute": "ip-dst",
-      "multiple": true,
-      "ui-priority": 1
-    },
-    "probes-reached-target": {
-      "description": "Number of probes that reached the target (ping: at least one reply; traceroute: destination responded; dns: a response was received; sslcert: a certificate was retrieved).",
-      "disable_correlation": true,
-      "misp-attribute": "counter",
-      "ui-priority": 0
-    },
-    "probes-scheduled": {
-      "description": "Number of probes scheduled for the measurement.",
-      "disable_correlation": true,
-      "misp-attribute": "counter",
-      "ui-priority": 0
-    },
-    "raw-results": {
-      "description": "Raw RIPE Atlas results (JSON) as returned by the API, kept as evidence.",
-      "disable_correlation": true,
-      "misp-attribute": "attachment",
-      "ui-priority": 0
-    },
-    "results-received": {
-      "description": "Number of probe results collected so far.",
+    "probes-requested": {
+      "description": "Number of probes requested when the measurement was launched.",
       "disable_correlation": true,
       "misp-attribute": "counter",
       "ui-priority": 0
@@ -82,49 +52,13 @@
       "misp-attribute": "link",
       "ui-priority": 0
     },
-    "rtt-max": {
-      "description": "Highest RTT in milliseconds across all probes (maximum of the per-probe maximums).",
-      "disable_correlation": true,
-      "misp-attribute": "float",
-      "ui-priority": 0
-    },
-    "rtt-median": {
-      "description": "Median in milliseconds of the per-probe median RTTs.",
-      "disable_correlation": true,
-      "misp-attribute": "float",
-      "ui-priority": 0
-    },
-    "rtt-min": {
-      "description": "Lowest RTT in milliseconds across all probes (minimum of the per-probe minimums).",
-      "disable_correlation": true,
-      "misp-attribute": "float",
-      "ui-priority": 0
-    },
-    "status": {
-      "description": "Last known measurement status as reported by the RIPE Atlas API.",
-      "disable_correlation": true,
-      "misp-attribute": "text",
-      "sane_default": [
-        "Specified",
-        "synchronizing",
-        "Scheduled",
-        "Ongoing",
-        "Stopped",
-        "Requested to stop",
-        "Forced to stop",
-        "No suitable probes",
-        "Failed",
-        "Archived"
-      ],
-      "ui-priority": 0
-    },
     "target": {
       "description": "Measurement target: IP address or hostname, or the query argument for DNS measurements.",
       "misp-attribute": "text",
       "ui-priority": 1
     }
   },
-  "description": "A measurement launched on RIPE Atlas (ping, traceroute, dns or sslcert) from a MISP enrichment module, used to track its status and collect its results.",
+  "description": "A measurement launched on RIPE Atlas (ping, traceroute, dns or sslcert). Holds only what is known at launch time; each collection of its results is a separate ripe-atlas-result object.",
   "meta-category": "network",
   "name": "ripe-atlas-measurement",
   "required": [

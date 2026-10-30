@@ -31,9 +31,10 @@ def launch(request, measurement_type, supported_attributes, extra_fields=None):
     two measurements and therefore two objects, one per measurement id.
 
     The objects hold only what is known locally. The status of a measurement
-    and the number of probes it reached are read by the collector module:
-    right after the POST the API has not published them yet, and it does so
-    at a different moment for each measurement of the same request.
+    and the number of probes scheduled and reached are read by the collector
+    module and stored in a ripe-atlas-result object: right after the POST the
+    API has not published them yet, and it does so at a different moment for
+    each measurement of the same request.
     """
     config = AtlasConfig(request.get("config"))
 
@@ -68,6 +69,7 @@ def launch(request, measurement_type, supported_attributes, extra_fields=None):
             definition["af"],
             config.is_public,
             launch_time,
+            config.probes_requested,
         )
         measurement.add_reference(attribute["uuid"], REFERENCE_RELATIONSHIP)
         event.add_object(measurement)
