@@ -16,8 +16,8 @@ PROBE_SOURCE_TYPES = ("area", "country", "countries", "region", "prefix", "asn",
 OPSEC_ACK_VALUE = "I understand that the target will see traffic from RIPE Atlas probes"
 
 DEFAULT_PROBES_REQUESTED = 5
-DEFAULT_PROBE_SOURCE_TYPE = "region"
-DEFAULT_PROBE_SOURCE_VALUE = "lacnic"
+DEFAULT_PROBE_SOURCE_TYPE = "area"
+DEFAULT_PROBE_SOURCE_VALUE = "WW"
 DEFAULT_MAX_CREDITS = 100
 
 _TRUE_VALUES = ("true", "yes", "on", "1")
@@ -59,15 +59,21 @@ def _read_positive_int(config, key, default):
     return number
 
 
+def read_api_key(module_config):
+    """Return the API key of a module, the only setting the collector needs."""
+    api_key = _read_string(module_config or {}, "api_key")
+    if not api_key:
+        raise AtlasConfigError("The RIPE Atlas API key is missing.")
+    return api_key
+
+
 class AtlasConfig:
     """Validated view of the ``moduleconfig`` of a launcher module."""
 
     def __init__(self, module_config):
         config = module_config or {}
 
-        self.api_key = _read_string(config, "api_key")
-        if not self.api_key:
-            raise AtlasConfigError("The RIPE Atlas API key is missing.")
+        self.api_key = read_api_key(config)
 
         acknowledgement = _read_string(config, "opsec_ack")
         if acknowledgement != OPSEC_ACK_VALUE:

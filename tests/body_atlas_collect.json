@@ -1,0 +1,14 @@
+{
+  "module": "atlas_collect",
+  "object": {
+    "name": "ripe-atlas-measurement",
+    "uuid": "8c5e3a5e-0b4f-4f6f-9d1a-0d3c2b1a9e01",
+    "Attribute": [
+      {"object_relation": "msm-id", "type": "text", "value": "236530947"},
+      {"object_relation": "measurement-type", "type": "text", "value": "ping"}
+    ]
+  },
+  "config": {
+    "api_key": "REPLACE_WITH_YOUR_ATLAS_KEY"
+  }
+}

@@ -36,9 +36,10 @@ def _run(query, measurement_ids=(1,)):
     """Run the handler with the API mocked, returning the result and the payload."""
     captured = {}
 
-    def fake_create(payload, api_key):
+    def fake_create(payload, api_key, deadline):
         captured["payload"] = payload
         captured["api_key"] = api_key
+        captured["deadline"] = deadline
         return list(measurement_ids)[: len(payload["definitions"])]
 
     with patch(LAUNCHER, side_effect=fake_create) as create:
@@ -130,6 +131,19 @@ def test_public_measurements_need_an_explicit_setting():
 
 def test_probe_source_comes_from_the_configuration():
     _, captured, _ = _run(_query("ip-dst", "45.33.32.156", probe_source_type="area", probe_source_value="WW"))
+    assert captured["payload"]["probes"] == [{"requested": 5, "type": "area", "value": "WW"}]
+
+
+def test_launch_stays_within_the_misp_timeout():
+    """MISP drops the answer of a module that exceeds Plugin.Enrichment_timeout."""
+    query = json.loads(_query("ip-dst", "45.33.32.156"))
+    query["timeout"] = 10
+    _, captured, _ = _run(json.dumps(query))
+    assert captured["deadline"].budget == 7
+
+
+def test_probes_are_worldwide_by_default():
+    _, captured, _ = _run(_query("ip-dst", "45.33.32.156", probe_source_type="", probe_source_value=""))
     assert captured["payload"]["probes"] == [{"requested": 5, "type": "area", "value": "WW"}]
 
 

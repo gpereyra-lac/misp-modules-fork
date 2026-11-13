@@ -13,9 +13,10 @@
       "ui-priority": 1
     },
     "observed-ip": {
-      "description": "IP address of the target as seen by the probes (dst_addr in the results). Multiple when probes resolve the name to different addresses.",
+      "description": "IP address of the target as seen by the probes (dst_addr in the results). Multiple when probes resolve the name to different addresses. Not an IDS indicator by default: it records what the probes reached, which may be shared infrastructure such as a CDN.",
       "misp-attribute": "ip-dst",
       "multiple": true,
+      "to_ids": false,
       "ui-priority": 1
     },
     "probes-reached-target": {
@@ -87,5 +88,5 @@
     "collection-time"
   ],
   "uuid": "3ce5f7d9-5a72-437b-998f-3d3158148377",
-  "version": 1
+  "version": 2
 }

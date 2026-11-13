@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pymisp import MISPEvent
 
 from .. import check_input_attribute, checking_error, standard_error_message
-from .client import AtlasError, create_measurement
+from .client import AtlasError, Deadline, create_measurement
 from .config import AtlasConfig, AtlasConfigError
 from .definitions import UnsupportedTargetError, build_launch_payload, estimate_credits, target_address_family
 from .objects import REFERENCE_RELATIONSHIP, build_measurement_object
@@ -36,6 +36,7 @@ def launch(request, measurement_type, supported_attributes, extra_fields=None):
     API has not published them yet, and it does so at a different moment for
     each measurement of the same request.
     """
+    deadline = Deadline(request.get("timeout"))
     config = AtlasConfig(request.get("config"))
 
     attribute = request.get("attribute")
@@ -56,7 +57,7 @@ def launch(request, measurement_type, supported_attributes, extra_fields=None):
             f" {config.probes_requested} probes), above the 'max_credits' setting of {config.max_credits}."
         )
 
-    measurement_ids = create_measurement(payload, config.api_key)
+    measurement_ids = create_measurement(payload, config.api_key, deadline)
     launch_time = datetime.now(tz=timezone.utc)
 
     event = MISPEvent()
